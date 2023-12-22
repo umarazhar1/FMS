@@ -1,8 +1,7 @@
 class ProjectsController < ApplicationController
   before_action :set_project, only: [:show, :edit, :update, :destroy]
-		before_action :require_user, except: [:show, :index]
-		before_action :require_same_user, only: [:edit, :update, :destroy]
-		before_action :authorize_manager, only: [:new, :create]
+  before_action :require_same_user, only: [:edit, :update, :destroy]
+  before_action :authorize_manager, only: [:new, :create]
 
 
 		def show
@@ -68,7 +67,7 @@ class ProjectsController < ApplicationController
 		end
 
 		def project_params
-			params.require(:project).permit(:name, :description)
+			params.require(:project).permit(:name, :description, developer_ids[])
 		end
 
 		def require_same_user

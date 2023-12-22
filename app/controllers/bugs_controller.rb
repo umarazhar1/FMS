@@ -20,7 +20,7 @@ class BugsController < ApplicationController
   end
 
   def index
-    @bugs = Bug.paginate(page: params[:page], per_page: 5)
+    @bugs = Bug.all
   end
 
   def show

@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   has_many :projects
 
-  validates :name, presence: true
+  validates :username, presence: true
   validates :user_type, presence: true
 
   enum user_type: {

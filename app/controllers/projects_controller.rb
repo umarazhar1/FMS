@@ -67,7 +67,7 @@ class ProjectsController < ApplicationController
 		end
 
 		def project_params
-			params.require(:project).permit(:name, :description, developer_ids[])
+			params.require(:project).permit(:name, :description, :developer_ids [])
 		end
 
 		def require_same_user

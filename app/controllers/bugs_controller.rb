@@ -22,7 +22,8 @@ class BugsController < ApplicationController
   end
 
   def index
-    @bugs = Bug.all
+    @project = Project.find(params[:project_id])
+    @bugs = @project.bugs
   end
 
   def show

@@ -4,15 +4,15 @@
       <div class="col-8 mt-4">
         <div class="card text-center shadow mb-5 bg-white rounded">
           <div class="card-header font-italic">
-            <% if project.user %>
-              created by <%= link_to project.user.username %>
+            <% if project.users.present? %>
+              created by 
             <% end %>
           </div>
           <div class="card-body">
             <h5 class="card-title"><%= link_to project.title, project_path(project), class: "text-success text-decoration-none" %></h5>
             <p class="card-text"><%= truncate(project.description, length: 25) %></p>
             <%= link_to 'View', project_path(project), class: "btn btn-outline-success" %>
-            <% if logger? && (project.user == current_user || current_user.manager?) %>
+            <% if logger? && (project.users.include?(current_user) || current_user.manager?) %>
               <%= link_to 'Edit', edit_project_path(project), class: "btn btn-outline-info" %>
               <%= link_to 'Delete', project_path(project.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
             <% end %>
@@ -28,6 +28,8 @@
     </div>
   <% end %>
 </div>
+
+
 
 <table>
     <thead>

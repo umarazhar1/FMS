@@ -5,15 +5,17 @@ class BugsController < ApplicationController
   before_action :authorize_qa, only: [:new, :create, :edit, :update]
 
   def new
-    @bug = Bug.new
+    @project = Project.find(params[:project_id])
+    @bug = @project.bugs.build
   end
 
   def create
-    # binding.break
-    @bug = Bug.new(bug_params)
+    binding.break
+    @project = Project.find(params[:project_id])
+    @bug = @project.bugs.build(bug_params)
     if @bug.save
       flash[:notice] = "Bug was successfully created"
-      redirect_to @bug
+      redirect_to project_bug_path(@project, @bug)
     else
       render 'new', status: :unprocessable_entity
     end
@@ -27,12 +29,15 @@ class BugsController < ApplicationController
   end
 
   def edit
+    @bug = Bug.find_by(id: params[:id])
   end
 
   def update
+    binding.break
+    @project = Project.find(params[:project_id])
     if @bug.update(bug_params)
       flash[:notice] = "Bug was updated successfully!"
-      redirect_to bug_path(@bug)
+      redirect_to project_bug_path(@project, @bug)
     else
       flash[:notice] = "Failed to update the project!"
       render 'edit', status: :unprocessable_entity

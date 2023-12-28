@@ -30,11 +30,12 @@ class BugsController < ApplicationController
   end
 
   def edit
-    @bug = Bug.find_by(id: params[:id])
+    @project = Project.find(params[:project_id])
+    # @bug = Bug.find_by(id: params[:id])
   end
 
   def update
-    binding.break
+    # binding.break
     @project = Project.find(params[:project_id])
     if @bug.update(bug_params)
       flash[:notice] = "Bug was updated successfully!"

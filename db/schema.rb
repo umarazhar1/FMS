@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_12_27_145927) do
+ActiveRecord::Schema[7.0].define(version: 2023_12_29_143216) do
   create_table "bugs", force: :cascade do |t|
     t.integer "project_id", null: false
     t.datetime "created_at", null: false
@@ -37,6 +37,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_145927) do
     t.datetime "updated_at", null: false
     t.string "title"
     t.text "description"
+    t.integer "creator_id"
+    t.index ["creator_id"], name: "index_projects_on_creator_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,4 +58,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_12_27_145927) do
   add_foreign_key "bugs", "projects"
   add_foreign_key "project_users", "projects"
   add_foreign_key "project_users", "users"
+  add_foreign_key "projects", "users", column: "creator_id"
 end

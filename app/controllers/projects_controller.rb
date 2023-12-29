@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+	load_and_authorize_resource
   before_action :set_project, only: [:show, :edit, :update, :destroy]
   before_action :require_same_user, only: [:edit, :update, :destroy]
   before_action :authorize_manager, only: [:new, :create]
@@ -6,16 +7,15 @@ class ProjectsController < ApplicationController
 
 
 		def show
-        # debugger
-				# binding.break # Call to debugger
     end
 
     def index
-        @projects = Project.all
+        @projects = current_user.projects
     end
 
     def new
 			@project = Project.new
+			@project.creator = current_user
     end
 
 		def edit

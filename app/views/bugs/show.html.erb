@@ -1,4 +1,9 @@
-<h1 class="text-center mt-4">Bug Title: <%= @bug.title %></h1>
-<h3 class="text-center mt-4">Bug Description: <%= @bug.description %></h3>
-<%= link_to ' Show all bugs of this project', project_bugs_path, class: "text-primary" %>
+<% if can? :read, @bug %>
+  <h1 class="text-center mt-4">Bug Title: <%= @bug.title %></h1>
+  <h3 class="text-center mt-4">Bug Description: <%= @bug.description %></h3>
+  <%= link_to ' Show all bugs of this project', project_bugs_path, class: "text-primary" %>
+<% else %>
+  <h2> You cannot see someone's bugs </h2>
+<% end %>
+
 

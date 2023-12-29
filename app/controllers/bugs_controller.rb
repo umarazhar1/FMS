@@ -1,4 +1,5 @@
 class BugsController < ApplicationController
+	load_and_authorize_resource
   # load_and_authorize_resource  # Added this line due to cancancan
   before_action :set_bug, only: [:show, :edit, :update]
   #before_action :require_admin, except: [:index, :show]
@@ -27,6 +28,7 @@ class BugsController < ApplicationController
   end
 
   def show
+    
   end
 
   def edit

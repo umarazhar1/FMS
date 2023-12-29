@@ -86,7 +86,9 @@ class ProjectsController < ApplicationController
 
 		def require_same_user
 			if !current_user.manager?
-				flash[:alert] = "You can only edit or delete your own project, or the manager have this access"
+				# flash[:alert] = "You can only edit or delete your own project, or the manager have this access"
+				flash[:alert] = "You can't do that, only manager have the access to edit or delete a project"
+
 				redirect_to @project
 			end
 		end

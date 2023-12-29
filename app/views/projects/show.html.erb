@@ -20,7 +20,15 @@
           </small>
         </div>
       </div>
+
+      </br></br>
+      <%= link_to '-> Create a bug for this project <-', new_project_bug_path(@project), class: "text-danger" %>
+      </br></br>
+      <%= link_to 'Show all the bugs of this project', project_bugs_path(@project), class: "text-danger" %>
+      </br></br>
       <%= link_to '[ Return to Projects Listing Page ]', projects_path, class: "text-danger" %>
+      </br></br>
+      <%= link_to 'Go to Home Page', root_path, class: "text-danger" %>
     </div>
   </div>
 </div>

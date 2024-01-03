@@ -10,6 +10,7 @@
             <%= f.text_field :title, class: "form-control shadow rounded mb-4", placeholder: "Enter bug's title" %>
           </div>
         </div>
+        </br>
 
         <div class="form-group row">
           <%= f.label :title, "Bug description", class: "col-2 col-form-label text-light" %>
@@ -17,6 +18,8 @@
             <%= f.text_area :description, class: "form-control shadow rounded mb-4", placeholder: "Enter bug's description" %>
           </div>
         </div>
+        </br>
+
 
         <div class="form-group row">
           <%= f.label :title, "Bug type", class: "col-2 col-form-label text-light" %>
@@ -24,6 +27,8 @@
             <%= f.select :bug_type, Bug.bug_types.keys, { prompt: "Select bug type (Click Me)" } , class: "custom-select form-control shadow rounded mb-4" %>
           </div>
         </div>
+        </br>
+
 
         <div class="form-group row">
           <%= f.label :title, "Bug status", class: "col-2 col-form-label text-light" %>
@@ -31,6 +36,17 @@
             <%= f.select :status, Bug.statuses.keys, { prompt: "Select bug status (Click Me)" } , class: "custom-select form-control shadow rounded mb-4" %>
           </div>
         </div>
+        </br>
+
+
+        <div class="form-group mb-2 row">
+          <%= f.label 'Developers who will solve this bug:', class: "col-2 col-form-label text-light" %>
+          <div class="col-10">
+            <%= f.collection_select :user_ids, User.where(user_type: 'developer'), :id, :username, {}, { multiple: true, id: 'category-select', class: "dropdown" } %>
+          </div>
+        </div>
+        </br>
+
 
         <div class="form-group row">
           <%= f.label :title, "Deadline", class: "col-2 col-form-label text-light" %>
@@ -38,6 +54,8 @@
             <%= f.date_field :deadline, class: "form-control shadow rounded mb-4", placeholder: "Enter deadline date" %>
           </div>
         </div>
+        </br>
+
 
         <div class="form-group row justify-content-center">
           <%= f.submit class: "btn btn-outline-light btn-lg" %>

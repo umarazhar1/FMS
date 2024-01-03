@@ -15,7 +15,6 @@ class ProjectsController < ApplicationController
 
     def new
 			@project = Project.new
-			@project.creator = current_user
     end
 
 		def edit
@@ -39,6 +38,8 @@ class ProjectsController < ApplicationController
 
 		def create
 			@project = Project.new(project_params)
+
+			@project.creator = current_user
 			if @project.save
 				@project.users << current_user
 				flash[:notice] = "Project was created successfully!"

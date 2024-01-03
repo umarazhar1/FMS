@@ -1,6 +1,10 @@
 class Bug < ApplicationRecord
   belongs_to :project
 
+  has_many :bug_users
+  has_many :users, through: :bug_users
+
+  belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
 
 
   validates :title, presence: true, length: { minimum: 3, maximum: 25 }

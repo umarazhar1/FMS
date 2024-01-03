@@ -1,9 +1,8 @@
 class BugsController < ApplicationController
 	load_and_authorize_resource
-  # load_and_authorize_resource  # Added this line due to cancancan
-  before_action :set_bug, only: [:show, :edit, :update]
-  #before_action :require_admin, except: [:index, :show]
+  before_action :set_bug, only: [:show, :edit, :update, :destroy]
   before_action :authorize_qa, only: [:new, :create, :edit, :update]
+  before_action :save_from_url_access
 
   def new
     @project = Project.find(params[:project_id])
@@ -11,10 +10,14 @@ class BugsController < ApplicationController
   end
 
   def create
-    binding.break
+    #binding.break
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(bug_params)
+    @bug.creator = current_user
     if @bug.save
+      @bug.users << current_user
+        
+
       flash[:notice] = "Bug was successfully created"
       redirect_to project_bug_path(@project, @bug)
     else
@@ -32,12 +35,11 @@ class BugsController < ApplicationController
   end
 
   def edit
-    @project = Project.find(params[:project_id])
+    @project = Project.find(params[:project_id])\
     # @bug = Bug.find_by(id: params[:id])
   end
 
   def update
-    # binding.break
     @project = Project.find(params[:project_id])
     if @bug.update(bug_params)
       flash[:notice] = "Bug was updated successfully!"
@@ -48,6 +50,11 @@ class BugsController < ApplicationController
     end
   end
 
+  def destroy
+    @bug.destroy
+    redirect_to project_bugs_path(@bug.project_id), notice: "Bug was successfully deleted."
+  end
+
   private
 
   def set_bug
@@ -55,18 +62,16 @@ class BugsController < ApplicationController
   end
 
   def bug_params
-    params.require(:bug).permit(:title, :description, :bug_type, :status, :deadline)
+    params.require(:bug).permit(:title, :description, :bug_type, :status, :deadline, user_ids: [])
   end
-
-  # def require_admin
-  #   if !(logged_in? && current_user.admin?)
-  #     flash[:alert] = "Only admins can perform that action"
-  #     redirect_to bugs_path
-  #   end
-  # end
 
   def authorize_qa
+    return if current_user.qa?
     redirect_to root_path, alert: 'Only Qa person can create a bug.' unless current_user.qa?
   end
+   
+  def save_from_url_access
+    redirect_to root_path, notice: 'Access Denied! This is not your project so you cannot create bug for this project' and return unless current_user.projects.pluck(:id).include?(params[:project_id].to_i)
+  end 
 
 end

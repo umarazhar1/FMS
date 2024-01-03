@@ -5,23 +5,26 @@ class Ability
 
   def initialize(user)
     user ||= User.new # Guest user
-
     if user.manager?
       # Managers can manage all projects
       can :manage, Project#, creator_id: user.id
-    elsif user.developer? || user.qa?
+    elsif user.developer?
       # Developers and QAs can view and edit bugs they are associated with
       can :read, Bug, project_id: user.projects.pluck(:id)
       # Developers and QAs can view projects they are associated with
       can :read, Project, id: user.projects.pluck(:id)
     elsif user.qa?
-      # Only QA can view and edit bugs they are associated with
-      can [:read, :write, :edit, :update ], Bug, project_id: user.projects.pluck(:id)
+      can :manage, Bug, project_id: user.projects.pluck(:id)
+      can %i[create new], Bug
+      can :read, Project, id: user.projects.pluck(:id)
     else
       # Default: Guests have no abilities
       cannot :read, Project
       cannot :read, Bug
     end
+  end
+end
+
 
 
 
@@ -51,5 +54,3 @@ class Ability
     #
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md
-  end
-end

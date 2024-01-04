@@ -7,7 +7,8 @@ class Ability
     user ||= User.new # Guest user
     if user.manager?
       # Managers can manage all projects
-      can :manage, Project#, creator_id: user.id
+      # can :create, Project
+      can :manage, Project, creator_id: user.id
       can :read, Bug, project_id: user.projects.pluck(:id)
     elsif user.developer?
       # Developers and QAs can view and edit bugs they are associated with

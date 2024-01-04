@@ -1,15 +1,17 @@
 <% if can? :read, @bug %>
   <h1 class="text-center mt-4">Bug Title: <%= @bug.title %></h1>
   <h3 class="text-center mt-4">Bug Description: <%= @bug.description %></h3>
-  <%= link_to 'Edit this bug', edit_project_bug_path(@bug.project_id, @bug), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
-  <%= link_to 'Delete this bug', project_bug_path(@bug.project_id, @bug.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+  <% if can? :manage, @bug %>
+    <%= link_to 'Edit this bug', edit_project_bug_path(@bug.project_id, @bug), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
+    <%= link_to 'Delete this bug', project_bug_path(@bug.project_id, @bug.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+  <% end %>
 
   <h4>Developers assigned to resolve this bug are:</h4>
-  <ul>
+  <ol>
     <% @bug.users.developer.each do |developer| %>
       <li><%= developer.username %></li>
     <% end %>
-  </ul>
+  </ol>
 
 
   </br></br></br>

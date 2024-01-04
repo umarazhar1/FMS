@@ -32,7 +32,7 @@ class Bug < ApplicationRecord
   private
 
   def check_user_type
-    unless user.qa?
+    unless creator.qa?
       errors.add(:base, 'Bug can only be created by a QA, not someone like you')
       throw(:abort)
     end

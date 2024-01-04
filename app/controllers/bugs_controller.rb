@@ -1,7 +1,7 @@
 class BugsController < ApplicationController
 	load_and_authorize_resource
   before_action :set_bug, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_qa, only: [:new, :create, :edit, :update]
+  # before_action :authorize_qa, only: [:new, :create, :edit, :update]
   before_action :save_from_url_access
 
   def new
@@ -51,6 +51,7 @@ class BugsController < ApplicationController
   end
 
   def destroy
+    @bug.bug_users.destroy_all
     @bug.destroy
     redirect_to project_bugs_path(@bug.project_id), notice: "Bug was successfully deleted."
   end
@@ -65,10 +66,10 @@ class BugsController < ApplicationController
     params.require(:bug).permit(:title, :description, :bug_type, :status, :deadline, user_ids: [])
   end
 
-  def authorize_qa
-    return if current_user.qa?
-    redirect_to root_path, alert: 'Only Qa person can create a bug.' unless current_user.qa?
-  end
+  # def authorize_qa
+  #   return if current_user.qa?
+  #   redirect_to root_path, alert: 'Only Qa person can create a bug.' unless current_user.qa?
+  # end
    
   def save_from_url_access
     redirect_to root_path, notice: 'Access Denied! This is not your project so you cannot create bug for this project' and return unless current_user.projects.pluck(:id).include?(params[:project_id].to_i)

@@ -4,7 +4,7 @@
   <%= link_to 'Edit this bug', edit_project_bug_path(@bug.project_id, @bug), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
   <%= link_to 'Delete this bug', project_bug_path(@bug.project_id, @bug.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
 
-  <h4>Developers assigned to this projects are:</h4>
+  <h4>Developers assigned to resolve this bug are:</h4>
   <ul>
     <% @bug.users.developer.each do |developer| %>
       <li><%= developer.username %></li>

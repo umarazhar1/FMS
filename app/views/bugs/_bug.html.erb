@@ -18,7 +18,9 @@
 </br>
 </br>
 
+<% if can? :manage, Bug, project_id: @project.id %>
   <%= link_to '(- Create a bug for this project -)', new_project_bug_path(@project), class: "text-danger" %>
+<% end %>
 </br> </br>
 <%= link_to '[ Return to projects listing ]', projects_path, class: "text-primary" %>
 </br></br>

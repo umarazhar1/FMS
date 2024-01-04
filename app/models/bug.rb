@@ -11,6 +11,7 @@ class Bug < ApplicationRecord
   validates_uniqueness_of :title
 
   validates :title, :status, :bug_type, presence: true
+  
 
   enum bug_type: {
     bug: 0,
@@ -24,5 +25,17 @@ class Bug < ApplicationRecord
     resolved: 2,
     completed: 3
   }
+
+
+  before_create :check_user_type
+
+  private
+
+  def check_user_type
+    unless user.qa?
+      errors.add(:base, 'Bug can only be created by a QA, not someone like you')
+      throw(:abort)
+    end
+  end
   
 end

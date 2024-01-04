@@ -6,6 +6,8 @@
   <%= link_to "Sign out", destroy_user_session_path, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, style: "text-decoration: none" %>
 </div>
 </br>
-<%= link_to "Create a new project", new_project_path %>
+<% if can? :manage, @project %>
+  <%= link_to "Create a new project", new_project_path %>
+<% end %>
 </br>
-<%= link_to "View all the projects", projects_path %>
+<%= link_to "View all the projects associated with me", projects_path %>

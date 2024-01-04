@@ -9,8 +9,8 @@ class Bug < ApplicationRecord
 
   validates :title, presence: true, length: { minimum: 3, maximum: 25 }
   validates_uniqueness_of :title
-
   validates :title, :status, :bug_type, presence: true
+  validate :validate_images
   
 
   enum bug_type: {
@@ -26,6 +26,8 @@ class Bug < ApplicationRecord
     completed: 3
   }
 
+  has_many_attached :images
+
 
   before_create :check_user_type
 
@@ -38,4 +40,19 @@ class Bug < ApplicationRecord
     end
   end
   
+  def validate_images
+    return unless images.attached?
+
+    images.each do |image|
+      unless image.content_type.in?(%w[image/png image/gif])
+        errors.add(:images, 'must be a PNG or GIF')
+      end
+
+      unless image.byte_size <= 5.megabytes
+        errors.add(:images, 'size cannot exceed 5MB')
+      end
+    end
+  end
+
+
 end

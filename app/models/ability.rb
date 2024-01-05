@@ -4,16 +4,15 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    user ||= User.new # Guest user
+    user ||= User.new
     if user.manager?
-      # Managers can manage all projects
-      # can :create, Project
+      # Manager can create projects and manage the projects he created and see the bugs of those projects which are created by him
       can :manage, Project, creator_id: user.id
       can :read, Bug, project_id: user.projects.pluck(:id)
     elsif user.developer?
-      # Developers and QAs can view and edit bugs they are associated with
-      can :read, Bug, project_id: user.projects.pluck(:id)
-      # Developers and QAs can view projects they are associated with
+      # Developer can view bugs he is associated with
+      can :read, Bug, id: user.bugs.pluck(:id)
+      # Developer can view projects he is associated with
       can :read, Project, id: user.projects.pluck(:id)
     elsif user.qa?
       can :manage, Bug, project_id: user.projects.pluck(:id)
@@ -27,12 +26,7 @@ class Ability
   end
 end
 
-
-
-
-
-    
-    # Define abilities for the user here. For example:
+# Define abilities for the user here. For example:
     #
     #   return unless user.present?
     #   can :read, :all

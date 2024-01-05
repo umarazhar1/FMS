@@ -10,14 +10,11 @@ class BugsController < ApplicationController
   end
 
   def create
-    #binding.break
     @project = Project.find(params[:project_id])
     @bug = @project.bugs.build(bug_params)
     @bug.creator = current_user
     if @bug.save
       @bug.users << current_user
-        
-
       flash[:notice] = "Bug was successfully created"
       redirect_to project_bug_path(@project, @bug)
     else
@@ -27,7 +24,11 @@ class BugsController < ApplicationController
 
   def index
     @project = Project.find(params[:project_id])
-    @bugs = @project.bugs
+    if current_user.manager?
+      @bugs = @project.bugs
+    else
+      @bugs = current_user.bugs.where(project_id: @project.id)
+    end
   end
 
   def show
@@ -35,7 +36,7 @@ class BugsController < ApplicationController
   end
 
   def edit
-    @project = Project.find(params[:project_id])\
+    @project = Project.find(params[:project_id])
     # @bug = Bug.find_by(id: params[:id])
   end
 
@@ -51,7 +52,7 @@ class BugsController < ApplicationController
   end
 
   def destroy
-    @bug.bug_users.destroy_all
+    # @bug.bug_users.destroy_all
     @bug.destroy
     redirect_to project_bugs_path(@bug.project_id), notice: "Bug was successfully deleted."
   end
@@ -74,5 +75,4 @@ class BugsController < ApplicationController
   def save_from_url_access
     redirect_to root_path, notice: 'Access Denied! This is not your project so you cannot create bug for this project' and return unless current_user.projects.pluck(:id).include?(params[:project_id].to_i)
   end 
-
 end

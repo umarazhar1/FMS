@@ -13,15 +13,17 @@
     <% end %>
   </ol>
 
-  # Screenshot of Bug
+  <!-- Screenshot of Bug -->
   <% if @bug.images.attached? %>
-    <h4>Images:</h4>
+    <h4>Screenshots of Bug:</h4>
     <div>
       <% @bug.images.each do |image| %>
         <%= image_tag(image) %>
       <% end %>
     </div>
   <% end %>
+
+  <p>This bug is created by <%= @bug.creator.username %></p>
 
   </br></br></br>
   <%= link_to ' Previous Page (Bugs Index)', project_bugs_path, class: "text-primary" %>

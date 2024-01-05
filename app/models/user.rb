@@ -13,9 +13,5 @@ class User < ApplicationRecord
   validates :username, presence: true
   validates :user_type, presence: true
 
-  enum user_type: {
-    developer: 0,
-    manager: 1,
-    qa: 2
-  }
+  enum user_type: { developer: 0, manager: 1, qa: 2 }
 end

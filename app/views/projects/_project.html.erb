@@ -13,7 +13,7 @@
             <p class="card-text"><%= truncate(project.description, length: 25) %></p>
             <%= link_to 'View', project_path(project), class: "btn btn-outline-success" %> &nbsp; &nbsp; &nbsp;
             <% if logger? && (project.users.include?(current_user) || current_user.manager?) %>
-              <% if can? :manage, @project %>
+              <% if can? :manage, Project, creator_id: current_user.id %>
                 <%= link_to 'Edit', edit_project_path(project), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
                 <%= link_to 'Delete', project_path(project.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
               <% end %>
@@ -49,7 +49,7 @@
           <td><%= project.title %></td>
           <td><%= truncate(project.description, length: 25) %></td>
           <td><%= link_to 'Show', project_path(project) %></td>
-          <% if can? :manage, @project %>
+          <% if can? :manage, Project, creator_id: current_user.id %>
             <td><%= link_to 'Edit', edit_project_path(project) %></td>
             <td><%= link_to 'Delete', project_path(project.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %></td>
           <% end %>
@@ -57,7 +57,7 @@
       <% end %>
     </tbody>
 </table>
-<% if can? :manage, Project %>
+<% if can? :manage, Project, creator_id: current_user.id %>
   <p class = "ms-4">
     <%= link_to 'Create a new project', new_project_path, class: "btn btn-outline-success" %>
   </p>

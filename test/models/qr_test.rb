@@ -1,6 +1,6 @@
 require "test_helper"
 
-class FoldersControllerTest < ActionDispatch::IntegrationTest
+class QrTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

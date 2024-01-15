@@ -1,0 +1,29 @@
+<% if can? :read, @qr %>
+  <h1 class="text-center mt-4">QR Code Name: <%= @qr.name %></h1>
+  <% if can? :manage, @qr %>
+    <%= link_to 'Edit this qr', edit_folder_qr_path(@qr.folder_id, @qr), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
+    <%= link_to 'Delete this qr', folder_qr_path(@qr.folder_id, @qr.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+  <% end %>
+
+  
+  <% if @qr.qr_code_image.attached? %>
+    <div>
+      <%= image_tag(@qr.qr_code_image) %>
+    </div>
+  <% end %>
+
+
+
+
+  <p>This QR Code is created by <%= @qr.folder.user.name %></p>
+
+  </br></br></br>
+  <%= link_to ' Previous Page (QR Codes Index)', folder_qrs_path, class: "text-primary" %>
+<% else %>
+  <h2> You cannot see someone's QR Code </h2>
+<% end %>
+</br>
+<%= link_to 'Go to Home Page', root_path, class: "text-danger" %>
+
+
+

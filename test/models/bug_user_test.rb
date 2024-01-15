@@ -1,6 +1,6 @@
 require "test_helper"
 
-class BugUserTest < ActiveSupport::TestCase
+class QrUserTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

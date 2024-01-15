@@ -1,0 +1,67 @@
+<div class="container">
+  <% @folders.each do |folder| %>
+    <div class="row justify-content-md-center">
+      <div class="col-8 mt-4">
+        <div class="card text-center shadow mb-5 bg-white rounded">
+          <div class="card-header font-italic">
+            <% if folder.user.present? %>
+              created by <%= folder.user.name%>
+            <% end %>
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><%= link_to folder.name, folder_path(folder), class: "text-success text-decoration-none" %></h5>
+            <p class="card-text"><%= truncate(folder.description, length: 25) %></p>
+            <%= link_to 'View', folder_path(folder), class: "btn btn-outline-success" %> &nbsp; &nbsp; &nbsp;
+            
+              <% if can? :manage, Folder, user_id: current_user.id %>
+                <%= link_to 'Edit', edit_folder_path(folder), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
+                <%= link_to 'Delete', folder_path(folder.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+              <% end %>
+
+          </div>
+          <div class="card-footer text-muted">
+            <small>
+              Created <%= time_ago_in_words(folder.created_at) %> ago,
+              Updated <%= time_ago_in_words(folder.updated_at) %> ago
+            </small>
+            </br></br></br></br>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+
+
+
+<table>
+    <thead>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th colspan="3">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% @folders.each do |folder| %>
+        <tr>
+          <td><%= folder.name %></td>
+          <td><%= truncate(folder.description, length: 25) %></td>
+          <td><%= link_to 'Show', folder_path(folder) %></td>
+          <% if can? :manage, Folder, user_id: current_user.id %>
+            <td><%= link_to 'Edit', edit_folder_path(folder) %></td>
+            <td><%= link_to 'Delete', folder_path(folder.id), data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+</table>
+<% if can? :manage, Folder, user_id: current_user.id %>
+  <p class = "ms-4">
+    <%= link_to 'Create a new folder', new_folder_path, class: "btn btn-outline-success" %>
+  </p>
+<% end %>
+
+</br></br>
+<%= link_to 'Go to Home Page', root_path, class: "text-danger" %>

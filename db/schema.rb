@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_01_04_135124) do
+ActiveRecord::Schema[7.0].define(version: 2024_01_15_145052) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,45 +39,21 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_135124) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "bug_users", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "bug_id", null: false
+  create_table "folders", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bug_id"], name: "index_bug_users_on_bug_id"
-    t.index ["user_id"], name: "index_bug_users_on_user_id"
-  end
-
-  create_table "bugs", force: :cascade do |t|
-    t.integer "project_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "title"
+    t.string "name"
     t.text "description"
-    t.integer "bug_type"
-    t.integer "status"
-    t.datetime "deadline"
-    t.integer "creator_id"
-    t.index ["creator_id"], name: "index_bugs_on_creator_id"
-    t.index ["project_id"], name: "index_bugs_on_project_id"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_folders_on_user_id"
   end
 
-  create_table "project_users", force: :cascade do |t|
-    t.integer "project_id", null: false
-    t.integer "user_id", null: false
+  create_table "qrs", force: :cascade do |t|
+    t.integer "folder_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["project_id"], name: "index_project_users_on_project_id"
-    t.index ["user_id"], name: "index_project_users_on_user_id"
-  end
-
-  create_table "projects", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "title"
-    t.text "description"
-    t.integer "creator_id"
-    t.index ["creator_id"], name: "index_projects_on_creator_id"
+    t.string "name"
+    t.index ["folder_id"], name: "index_qrs_on_folder_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -88,7 +64,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_135124) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "username"
+    t.string "name"
     t.integer "user_type"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -96,11 +72,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_04_135124) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "bug_users", "bugs"
-  add_foreign_key "bug_users", "users"
-  add_foreign_key "bugs", "projects"
-  add_foreign_key "bugs", "users", column: "creator_id"
-  add_foreign_key "project_users", "projects"
-  add_foreign_key "project_users", "users"
-  add_foreign_key "projects", "users", column: "creator_id"
+  add_foreign_key "folders", "users"
+  add_foreign_key "qrs", "folders"
 end

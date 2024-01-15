@@ -1,13 +1,13 @@
 <h1 style = "text-align:center"> This is Home Page! </h1>
-<h2 style = "text-align:center"> You are signed in as <%= current_user.username %> </h2>
+<h2 style = "text-align:center"> You are signed in as <%= current_user.name %> </h2>
 <h3 style = "text-align:center"> You are a <%= current_user.user_type.upcase %> </h3>
 
 <div style = "text-align: center; text-decoration: none">
   <%= link_to "Sign out", destroy_user_session_path, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, style: "text-decoration: none" %>
 </div>
 </br>
-<% if can? :manage, Project %>
-  <%= link_to "Create a new project", new_project_path %>
+<% if can? :manage, Folder %>
+  <%= link_to "Create a new Folder", new_folder_path %>
 <% end %>
 </br>
-<%= link_to "View all the projects associated with me", projects_path %>
+<%= link_to "View all the folders associated with me", folders_path %>

@@ -5,23 +5,20 @@ class Ability
 
   def initialize(user)
     user ||= User.new
-    if user.manager?
-      # Manager can create projects and manage the projects he created and see the bugs of those projects which are created by him
-      can :manage, Project, creator_id: user.id
-      can :read, Bug, project_id: user.projects.pluck(:id)
-    elsif user.developer?
-      # Developer can view bugs he is associated with
-      can :read, Bug, id: user.bugs.pluck(:id)
-      # Developer can view projects he is associated with
-      can :read, Project, id: user.projects.pluck(:id)
-    elsif user.qa?
-      can :manage, Bug, project_id: user.projects.pluck(:id)
-      can %i[create new], Bug
-      can :read, Project, id: user.projects.pluck(:id)
+    if user.admin?
+      # Admin can create folders and manage all the folders created by anyone
+      can :manage, Folder
+      # Admin can create qrs and manage all the qrs created by anyone
+      can :manage, Qr
+    elsif user.simple_user?
+      # Simple user can create folders and manage only their own folders that have been created by themselves
+      can :manage, Folder, user_id: user.id
+      # Simple user can create qrs and manage only their own qrs that have been created by themselves
+      can :manage, Qr, folder: { user_id: user.id }
     else
       # Default: Guests have no abilities
-      cannot :read, Project
-      cannot :read, Bug
+      cannot :read, Folder
+      cannot :read, Qr
     end
   end
 end

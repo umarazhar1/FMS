@@ -4,14 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_many :project_users
-  has_many :projects, through: :project_users
+  has_many :folders, dependent: :destroy
 
-  has_many :bug_users
-  has_many :bugs, through: :bug_users
-
-  validates :username, presence: true
+  validates :name, presence: true
   validates :user_type, presence: true
 
-  enum user_type: { developer: 0, manager: 1, qa: 2 }
+  enum user_type: { admin: 0, simple_user: 1 }
 end

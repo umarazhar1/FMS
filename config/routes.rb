@@ -3,10 +3,10 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   get 'about', to: 'pages#about'
 
-  devise_for :users, controllers: { sessions: 'users/sessions' }
+  devise_for :users
 
-  resources :projects do
-    resources :bugs
+  resources :folders do
+    resources :qrs
   end
 
 

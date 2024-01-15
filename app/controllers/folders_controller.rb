@@ -8,7 +8,11 @@ class FoldersController < ApplicationController
     end
 
     def index
+			if current_user.admin?
+        @folders = Folder.all
+			else
         @folders = current_user.folders
+			end
     end
 
     def new

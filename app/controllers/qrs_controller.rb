@@ -1,29 +1,47 @@
 class QrsController < ApplicationController
   load_and_authorize_resource
   before_action :set_qr, only: [:show, :edit, :update, :destroy]
+  before_action :set_folder, only: [:new, :create]
 
   def new
-    @folder = Folder.find(params[:folder_id])
-    @qr = @folder.qrs.build
+    #@qr = @folder.qrs.build
+    @qr = @folder ? @folder.qrs.build : Qr.new
   end
 
   def create
-    @folder = Folder.find(params[:folder_id])
-    @qr = @folder.qrs.build(qr_params)
+    if @folder
+      @qr = @folder.qrs.build(qr_params)
+    else
+      @qr = Qr.new(qr_params)
+    end
+    @qr.user = current_user
     if @qr.save
-      flash[:notice] = "Qr was successfully created"
-      redirect_to folder_qr_path(@folder, @qr)
+      if @folder
+        redirect_to folder_qrs_path(@folder), notice: 'QR was successfully created.'
+      else
+        redirect_to qrs_path, notice: 'QR was successfully created.'
+      end
     else
       render 'new', status: :unprocessable_entity
     end
   end
 
+
+
   def index
-    @folder = Folder.find(params[:folder_id])
-    if current_user.admin?
-      @qrs = @folder.qrs
+    if params[:folder_id].present?
+      @folder = Folder.find(params[:folder_id])
+      if current_user.admin?
+        @qrs = @folder.qrs
+      else
+        @qrs = current_user.qrs.where(folder_id: @folder.id)
+      end
     else
-      @qrs = current_user.qrs.where(folder_id: @folder.id)
+      if current_user.admin?
+        @qrs = Qr.where(folder_id: nil)  # All Qrs not associated with any folder
+      else
+        @qrs = current_user.qrs.where(folder_id: nil)
+      end
     end
   end
 
@@ -45,6 +63,7 @@ class QrsController < ApplicationController
       render 'edit', status: :unprocessable_entity
     end
   end
+  
 
   def destroy
     @qr.destroy
@@ -55,6 +74,10 @@ class QrsController < ApplicationController
 
   def set_qr
     @qr = Qr.find(params[:id])
+  end
+
+  def set_folder
+    @folder = Folder.find(params[:folder_id]) if params[:folder_id].present?
   end
 
   def qr_params

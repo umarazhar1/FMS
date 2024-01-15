@@ -5,6 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :folders, dependent: :destroy
+  has_many :qrs, dependent: :destroy
+
 
   validates :name, presence: true
   validates :user_type, presence: true

@@ -1,3 +1,4 @@
+<h1 style = "text-align : center">This is Folders Show Page</h1>
 <% if can? :manage, @folder %>
   <h1 class= "text-center text-primary mt-4"><%= @folder.name %></h1>
   <div class="container">
@@ -29,10 +30,7 @@
         </div>
 
         </br></br>
-        <% if can? :manage, Qr, folder_id: @folder.id %>
-          <%= link_to '<- Create a qr for this folder ->', new_folder_qr_path(@folder), class: "text-danger" %>
-        <% end %>
-        
+        <%= link_to '<- Create a qr for this folder ->', new_folder_qr_path(@folder), class: "text-danger" %>
         </br></br>
         <%= link_to 'Show all the qrs of this folder', folder_qrs_path(@folder), class: "text-danger" %>
         </br></br>

@@ -5,7 +5,9 @@
         <div class="card text-center shadow mb-5 bg-white rounded">
           <div class="card-header font-italic">
             <% if folder.user.present? %>
-              created by <%= folder.user.name%>
+              <small>
+                <i>The Folder below is created by <%= folder.user.name%></i>
+              </small>
             <% end %>
           </div>
           <div class="card-body">

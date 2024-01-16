@@ -1,25 +1,25 @@
 class QrsController < ApplicationController
   load_and_authorize_resource
   before_action :set_qr, only: [:show, :edit, :update, :destroy]
-  before_action :set_folder, only: [:new, :create]
+  before_action :set_folder, only: [:index, :new, :create, :edit, :update]
 
   def new
-    #@qr = @folder.qrs.build
     @qr = @folder ? @folder.qrs.build : Qr.new
   end
 
   def create
-    if @folder
+    if @folder.present?
       @qr = @folder.qrs.build(qr_params)
     else
+      binding.break
       @qr = Qr.new(qr_params)
     end
     @qr.user = current_user
     if @qr.save
-      if @folder
-        redirect_to folder_qrs_path(@folder), notice: 'QR was successfully created.'
+      if @folder.present?
+        redirect_to folder_qr_path(@folder, @qr), notice: 'QR was successfully created.'
       else
-        redirect_to qrs_path, notice: 'QR was successfully created.'
+        redirect_to qr_path(@qr), notice: 'QR was successfully created.'
       end
     else
       render 'new', status: :unprocessable_entity
@@ -29,8 +29,7 @@ class QrsController < ApplicationController
 
 
   def index
-    if params[:folder_id].present?
-      @folder = Folder.find(params[:folder_id])
+    if @folder.present?
       if current_user.admin?
         @qrs = @folder.qrs
       else
@@ -38,7 +37,7 @@ class QrsController < ApplicationController
       end
     else
       if current_user.admin?
-        @qrs = Qr.where(folder_id: nil)  # All Qrs not associated with any folder
+        @qrs = Qr.where(folder_id: nil)  # All Qrs which are not associated with any folder
       else
         @qrs = current_user.qrs.where(folder_id: nil)
       end
@@ -46,18 +45,19 @@ class QrsController < ApplicationController
   end
 
   def show
-    
   end
 
   def edit
-    @folder = Folder.find(params[:folder_id])
   end
 
   def update
-    @folder = Folder.find(params[:folder_id])
     if @qr.update(qr_params)
       flash[:notice] = "QR Code is updated successfully!"
-      redirect_to folder_qr_path(@folder, @qr)
+      if @folder
+        redirect_to folder_qr_path(@folder, @qr)
+      else
+        redirect_to qr_path(@qr)
+      end
     else
       flash[:notice] = "Failed to update the QR Code!"
       render 'edit', status: :unprocessable_entity

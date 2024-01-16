@@ -1,4 +1,11 @@
-<h1 class="text-center mt-4">QR Codes inside the folder "<%= @folder.name %>"</h1>
+<h1 style = "text-align : center">This is QR Codes Index Page</h1>
+
+<% if @folder.present? %>
+  <h2 class="text-center mt-4">List of QR Codes inside the folder "<%= @folder.name %>"</h2>
+<% else %>
+  <h2 class="text-center mt-4">List of QR Codes without any folder</h2>
+<% end %>
+
 
 <%= render 'qr' %>
 

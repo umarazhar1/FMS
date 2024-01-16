@@ -1,12 +1,14 @@
 <div class="container">
   <% @qrs.each do |qr| %>
-    <div class="row justify-content-md-center">
-      <div class="col-4 mt-4">
-        <div class="card text-center shadow mb-5 bg-white rounded">
+        <div>
           <div class="card-body">
-            <h3 class="card-title"><%= link_to qr.name, folder_qr_path(qr.folder_id, qr), class: "text-success" %></h5>
+            <% if qr.folder_id.present? %>
+              <h3 class="card-title"><%= link_to qr.name, folder_qr_path(qr.folder_id, qr), class: "text-success" %></h5>
+            <% else %>
+              <h3 class="card-title"><%= link_to qr.name, qr_path(qr), class: "text-success" %></h5>
+            <% end %>
           </div>
-          <div class="card-footer text-muted">
+          <div>
             <small>
               Created by <%= qr.user.name %>
             </small>
@@ -15,15 +17,16 @@
             edited <%= time_ago_in_words(qr.updated_at) %> ago</small>
           </div>
         </div>
-      </div>
-    </div>
+        <br><br>
   <% end %>
 </div>
 </br>
 </br>
 
-<% if can? :manage, Qr, folder_id: @folder.id %>
-  <%= link_to '(- Create a qr for this folder -)', new_folder_qr_path(@folder), class: "text-danger" %>
+<% if @folder.present? %>
+  <% if can? :manage, Qr, folder_id: @folder.id %>
+    <%= link_to '(- Create a qr for this folder -)', new_folder_qr_path(@folder), class: "text-danger" %>
+  <% end %>
 <% end %>
 </br> </br>
 <%= link_to '[ Return to Folders listing ]', folders_path, class: "text-primary" %>

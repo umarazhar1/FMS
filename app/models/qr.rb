@@ -1,7 +1,6 @@
 class Qr < ApplicationRecord
   has_one_attached :qr_code_image
-  has_many :qrs, dependent: :destroy
-  belongs_to :folder
+  belongs_to :folder, optional: true
   belongs_to :user
 
   validates_uniqueness_of :name
@@ -13,7 +12,7 @@ class Qr < ApplicationRecord
 
   def user_should_present
     unless user.present?
-      errors.add(:base, 'Project can only be created by a manager, not someone like you')
+      errors.add(:base, 'A QR code cannot be created without any user. Somebody must be there to create the QR code..... COMMON SENSE!')
       throw(:abort)
     end
   end

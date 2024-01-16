@@ -1,24 +1,42 @@
-<% if can? :read, @qr %>
-  <h1 class="text-center mt-4">QR Code Name: <%= @qr.name %></h1>
-  <% if can? :manage, @qr %>
-    <%= link_to 'Edit this qr', edit_folder_qr_path(@qr.folder_id, @qr), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
-    <%= link_to 'Delete this qr', folder_qr_path(@qr.folder_id, @qr.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
-  <% end %>
+<h1 style = "text-align : center">This is QR Code Show Page</h1>
 
-  
+<% if can? :read, @qr %>
+  <h2 class="text-center mt-4">QR Code Name: <%= @qr.name %></h2>
+
+  <h4>Scan the picture below</h4>
   <% if @qr.qr_code_image.attached? %>
     <div>
       <%= image_tag(@qr.qr_code_image) %>
     </div>
   <% end %>
+  <div>
+    <small>Created <%= time_ago_in_words(@qr.created_at) %> ago, 
+    edited <%= time_ago_in_words(@qr.updated_at) %> ago</small>
+  </div>
 
-
-
-
-  <p>This QR Code is created by <%= @qr.folder.user.name %></p>
+  <% if @folder.present? %>
+    <small><i>This QR Code is created by <%= @qr.folder.user.name %></i></small>
+  <% else %>
+    <small><i>This QR Code is created by <%= @qr.user.name %></i></small>
+  <% end %>
+  <br>
+  <% if can? :manage, @qr %>
+    <% if @folder.present? %>
+      <%= link_to 'Edit this qr', edit_folder_qr_path(@qr.folder_id, @qr), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
+      <%= link_to 'Delete this qr', folder_qr_path(@qr.folder_id, @qr.id), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+    <% else %>
+      <%= link_to 'Edit this qr', edit_qr_path(@qr), class: "btn btn-outline-info" %> &nbsp; &nbsp; &nbsp;
+      <%= link_to 'Delete this QR Code', qr_path(@qr), class: "btn btn-outline-danger", data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'} %>
+    <% end %>
+  <% end %>
 
   </br></br></br>
-  <%= link_to ' Previous Page (QR Codes Index)', folder_qrs_path, class: "text-primary" %>
+  <% if @folder.present? %>
+    <%= link_to 'Go to Previous Page (QR Codes Index Page associated with the folder)', folder_qrs_path, class: "text-primary" %>
+  <% else %>
+    <%= link_to 'Go to Previous Page (QR Codes Index Page without folder)', qrs_path, class: "text-primary" %>
+  <% end %>
+
 <% else %>
   <h2> You cannot see someone's QR Code </h2>
 <% end %>

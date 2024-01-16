@@ -49,7 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_01_15_152209) do
   end
 
   create_table "qrs", force: :cascade do |t|
-    t.integer "folder_id", null: false
+    t.integer "folder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"

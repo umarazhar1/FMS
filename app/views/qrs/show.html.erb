@@ -6,7 +6,7 @@
   <h4>Scan the picture below</h4>
   <% if @qr.qr_code_image.attached? %>
     <div>
-      <%= image_tag(@qr.qr_code_image) %>
+      <%= image_tag(url_for(@qr.qr_code_image)) %>
     </div>
   <% end %>
   <div>

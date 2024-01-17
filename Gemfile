@@ -74,3 +74,8 @@ end
 gem "jsbundling-rails", "~> 1.2"
 gem 'cancancan'
 gem 'devise', '~> 4.9', '>= 4.9.3'
+
+gem "rqrcode", "~> 2.2"
+gem 'rqrcode_png'
+gem 'chunky_png', '~> 1.3', '>= 1.3.5'
+gem "sidekiq", "~> 7.2"

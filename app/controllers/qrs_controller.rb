@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class QrsController < ApplicationController
   load_and_authorize_resource
-  before_action :set_qr, only: [:show, :edit, :update, :destroy]
-  before_action :set_folder, only: [:index, :new, :create, :edit, :update]
+  before_action :set_qr, only: %i[show edit update destroy]
+  before_action :set_folder, only: %i[index new create edit update]
 
   def new
     @qr = @folder ? @folder.qrs.build : Qr.new
@@ -11,7 +13,6 @@ class QrsController < ApplicationController
     if @folder.present?
       @qr = @folder.qrs.build(qr_params)
     else
-      binding.break
       @qr = Qr.new(qr_params)
     end
     @qr.user = current_user
@@ -26,48 +27,41 @@ class QrsController < ApplicationController
     end
   end
 
-
-
   def index
-    if @folder.present?
-      if current_user.admin?
-        @qrs = @folder.qrs
-      else
-        @qrs = current_user.qrs.where(folder_id: @folder.id)
-      end
-    else
-      if current_user.admin?
-        @qrs = Qr.where(folder_id: nil)  # All Qrs which are not associated with any folder
-      else
-        @qrs = current_user.qrs.where(folder_id: nil)
-      end
-    end
+    @qrs = if @folder.present?
+             if current_user.admin?
+               @folder.qrs
+             else
+               current_user.qrs.where(folder_id: @folder.id)
+             end
+           elsif current_user.admin?
+             Qr.where(folder_id: nil)  # All Qrs which are not associated with any folder
+           else
+             current_user.qrs.where(folder_id: nil)
+           end
   end
 
-  def show
-  end
+  def show; end
 
-  def edit
-  end
+  def edit; end
 
   def update
     if @qr.update(qr_params)
-      flash[:notice] = "QR Code is updated successfully!"
+      flash[:notice] = 'QR Code is updated successfully!'
       if @folder
         redirect_to folder_qr_path(@folder, @qr)
       else
         redirect_to qr_path(@qr)
       end
     else
-      flash[:notice] = "Failed to update the QR Code!"
+      flash[:notice] = 'Failed to update the QR Code!'
       render 'edit', status: :unprocessable_entity
     end
   end
-  
 
   def destroy
     @qr.destroy
-    redirect_to folder_qrs_path(@qr.folder_id), notice: "QR Code was successfully deleted."
+    redirect_to folder_qrs_path(@qr.folder_id), notice: 'QR Code was successfully deleted.'
   end
 
   private
@@ -83,5 +77,4 @@ class QrsController < ApplicationController
   def qr_params
     params.require(:qr).permit(:name, :qr_code_image)
   end
-
 end

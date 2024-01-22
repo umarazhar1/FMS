@@ -2,8 +2,8 @@
 <h2 style = "text-align:center"> You are signed in as <%= current_user.name %> </h2>
 <h3 style = "text-align:center"> You are a <%= current_user.user_type.upcase %> </h3>
 
-<div style = "text-align: center; text-decoration: none">
-  <%= link_to "Sign out", destroy_user_session_path, data: {turbo_method: :delete, turbo_confirm: 'Are you sure?'}, style: "text-decoration: none" %>
+<div style="text-align: center;">
+  <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete, turbo_confirm: 'Are you sure?' }, style: "text-decoration: none; display: inline-block; padding: 10px 20px; font-size: 16px; border: 1px solid #3498db; color: #3498db; border-radius: 50px; background-color: #fff; transition: background-color 0.3s, color 0.3s;" %>
 </div>
 </br>
 <% if can? :manage, Folder %>
@@ -15,5 +15,9 @@
 <%= link_to "View index page of QR codes without folders", qrs_path %>
 </br>
 <%= link_to 'Create a QR without folder', new_qr_path, class: "text-danger" %>
+</br>
 
+<!-- Following work is done for excel sheet (To display data in excel sheet) -->
+<%= link_to 'Download as Excel', folders_path(format: :xlsx) %>
+<!-- Ye upar wala kaam excel sheet k liye -->
 

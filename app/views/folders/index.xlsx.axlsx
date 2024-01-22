@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+
+# Ye puri file hi Excel sheet walay kaam k liye banayi hai
+# Following work is done for excel sheet (To display data in excel sheet)
+wb = xlsx_package.workbook
+
+wb.styles do |style|
+  project_heading = style.add_style(b: true, sz: 14)
+  heading = style.add_style(b: true)
+
+  wb.add_worksheet(name: 'FMS') do |sheet|
+    # Add a title row
+    sheet.add_row ['Folder Management System'], style: project_heading
+    # Add the date this was downloaded
+    sheet.add_row ['Downloaded at', Time.now.strftime('%b %-d, %Y')]
+    # Add a blank row
+    sheet.add_row []
+    # Create the header row
+    sheet.add_row ['Person Name', 'Person Role', 'Folders', 'QRs'], style: heading
+    # Create entries for each item
+    @users.each do |user|
+      # Get comma-separated folder names
+      folder_names = user.folders.pluck(:name).join(', ')
+
+      # Get a hash of folder names and associated QR names
+      folder_qrs = {}
+      user.folders.each do |folder|
+        folder_qrs[folder.name] = folder.qrs.pluck(:name).join(', ')
+      end
+
+      # Create a row for the user with user details, folders, and associated QRs
+      sheet.add_row [user.name, user.user_type, folder_names, folder_qrs.values.join(', ')]
+    end
+  end
+end

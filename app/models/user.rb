@@ -19,6 +19,12 @@ class User < ApplicationRecord
   private
 
   def send_mail
-    UserMailer.welcome_email(self).deliver_later
+    UserMailer.with(user: @user).welcome_email.deliver_later
   end
+
+  # Following method can also be used, it will do the same work as above method is working
+  # def send_mail
+  #   UserMailer.welcome_email(self).deliver_later
+  # end
+  
 end
